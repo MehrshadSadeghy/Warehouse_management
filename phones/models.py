@@ -1,6 +1,6 @@
 from django.db import models
 from brands.models import Brand, Country
-
+# models are here
 class Phone(models.Model):
     brand = models.ForeignKey(Brand, on_delete=models.CASCADE)
     phone_name = models.CharField(max_length=50)
