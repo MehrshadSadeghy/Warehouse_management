@@ -1,9 +1,12 @@
+from urllib.request import parse_keqv_list
+
 from django.db.models import F
 from django.http import HttpResponseRedirect, HttpResponse
 from django.shortcuts import render
-from rest_framework import status
+from rest_framework import status, mixins
 from rest_framework.response import Response
 from rest_framework.views import APIView
+from rest_framework.viewsets import GenericViewSet
 
 from .forms import PhoneForm, BrandSearchForm
 from .models import Phone
@@ -49,3 +52,11 @@ def redirectToSearchBrandPhone(request):
         form = BrandSearchForm(request.POST)
         name = form.data['name']
         return HttpResponseRedirect(f"/phone/api/v1/brands/{name}/phones/")
+
+class SearchPhoneModelMixin(GenericViewSet, mixins.RetrieveModelMixin):
+    queryset = Phone.objects.all()
+    serializer_class = PhoneSerializer
+
+    def get(self, request, pk):
+        return self.retrieve(request, pk)
+
